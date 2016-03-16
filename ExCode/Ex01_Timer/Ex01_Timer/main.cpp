@@ -50,19 +50,25 @@ void renderScene(void) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
     gluLookAt(0.0,0.0,5.0, 0.0,0.0,-1.0, 0.0f,1.0f,0.0f);
-    for(int i=0; i<60; i++) { Draw(i); }
+    for(int i=0; i<60; i++) { Draw(i); } // 시계를 그린다
     glColor3f(0,0,0);
 
-    static float angle;
-    stopWatch.stop();
-    float dt = stopWatch.getElapsedTime();
+    static float sec;
+	int angle;
+
+	stopWatch.stop();
+    float dt = stopWatch.getElapsedTime(); // 흐른 시간을 측정한다.
     stopWatch.start();
-    angle += dt*6.0/1000000.0;
+    sec += dt/1000000.0; // 바늘의 위치를 정한다
+	int iSec = (int) sec;
+	angle = 6*iSec;
+	
+
 
     glPushMatrix();
     glRotatef(-angle, 0.0, 0.0, 1.0);
     glBegin(GL_LINES);
-    glVertex3f(0.0,0.0,0.0);
+    glVertex3f(0.0,0.0,0.0); // 바늘을 그린다
     glVertex3f(0.0,1.0,0.0);
     glEnd();
     glPopMatrix();
