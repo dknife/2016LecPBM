@@ -22,7 +22,12 @@ void CKinematicSimulator::doBeforeSimulation(double dt, double currentTime) {
 }
 
 void CKinematicSimulator::doSimulation(double dt, double currentTime) {
-    pos = CVec3d(currentTime,0.0,0.0);
+	CVec3d initialPos(0,0,0);
+	CVec3d initialVel(2,5,0);
+	CVec3d gravity(0, -10,0);
+    pos = initialPos + initialVel * currentTime
+		+ 0.5 * gravity * (currentTime*currentTime);
+		
     particle.setPosition(pos[0], pos[1], pos[2]);
     particle.drawWithGL();
 }
