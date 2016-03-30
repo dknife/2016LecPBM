@@ -136,7 +136,7 @@ void displayFunction(void) {
 
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    setupCamera(5, 10, 10, 0, 0, 0, 0, 1, 0);
+    setupCamera(5, 0, 10, 0, 0, 0, 0, 1, 0);
 
     drawPlane(2.0, 2.0, 20, 20);
     glLineWidth(3); drawAxes(); glLineWidth(1);

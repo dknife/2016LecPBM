@@ -8,7 +8,10 @@ CParticle::CParticle() {
 
 void CParticle::init(void) {
 	initPos.set(0,0,0);
-	initVel.set(rand(-5,5), rand(3, 10), rand(-5,5));
+	initVel.set(rand(-1,1), rand(0, 1), rand(-1,1));
+	initVel.normalize();
+	initVel = rand(5, 15) * initVel;
+	
 
 }
 

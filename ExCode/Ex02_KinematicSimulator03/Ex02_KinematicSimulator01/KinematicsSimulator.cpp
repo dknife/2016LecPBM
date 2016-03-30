@@ -12,7 +12,7 @@ CKinematicSimulator::CKinematicSimulator() : CSimulator() {}
 
 
 void CKinematicSimulator::init() {
-   particle.init();
+   for(int i=0; i<NPARTICLES; i++) particle[i].init();
 }
 
 void CKinematicSimulator::doBeforeSimulation(double dt, double currentTime) {
@@ -21,8 +21,10 @@ void CKinematicSimulator::doBeforeSimulation(double dt, double currentTime) {
 
 void CKinematicSimulator::doSimulation(double dt, double currentTime) {
 	
-	particle.simulate(dt, currentTime);
-    particle.drawWithGL();
+	for(int i=0; i<NPARTICLES; i++) {
+		particle[i].simulate(dt, currentTime);
+		particle[i].drawWithGL();
+	}
 }
 
 

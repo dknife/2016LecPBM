@@ -10,9 +10,11 @@
 
 #include "Simulator.h"
 #include "Particle.h"
+
+#define NPARTICLES 1000
+
 class CKinematicSimulator : public CSimulator {
-    CParticle particle;
-    CVec3d pos;
+    CParticle particle[NPARTICLES];
 
 public:
     CKinematicSimulator();
