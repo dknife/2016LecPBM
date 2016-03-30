@@ -8,7 +8,7 @@ CParticle::CParticle() {
 
 void CParticle::init(void) {
 	center.set(0,0,0);
-	vel.set(rand(-1,1), rand(0, 1), rand(-1,1));
+	vel.set(rand(-1,-2), rand(0, 1), rand(-1,1));
 	vel.normalize();
 	vel = rand(3, 7) * vel;
 }
