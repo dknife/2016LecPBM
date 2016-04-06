@@ -8,25 +8,31 @@ CParticle::CParticle() {
 }
 
 void CParticle::init(void) {
-	center.set(rand(-10,10), 10.0, rand(-10,10));
-	vel.set(0.0, 0.0, 0.0);
+	center.set(0, 10.0, 0);
+	vel.set(rand(-20,20), -10.0, rand(-20,20));
 }
 
 void CParticle::simulate(double dt, double curTime) {
+	if(dt>0.03) dt=0.03;
+
 	CVec3d gravity(0, -10,0);
 	CVec3d acc = gravity;
 	
 	// buoyancy
 	// buoy = rho * gravity * volume;
 	// acc +=  buoy/mass;
-	float rho = 30.0;
-	float dragCoeff = - 2.;
+	float rho = 10.0;
+	float dragCoeff = - 1.;
 	CVec3d drag(0,0,0);
-	float volume = radius*radius*radius;
-	if(center[1]<5.0) { // in the water
+	float volume = 3.1415*(3.0/4.0)*radius*radius*radius;
+	float pen = 5.0 + radius - center[1];
+	float ratio;
+	if(pen>0.0) { // in the water
+		if(pen>2.0*radius) ratio=1.0;
+		else ratio = pen/(2.0*radius);
 		CVec3d buoy(0,rho*10.0*volume,0);
-		drag = dragCoeff * vel; 
-		acc = acc + (1.0/mass)*(drag+buoy);
+		drag = dragCoeff * (vel^vel)*vel.getNormalized(); 
+		acc = acc + ratio*(1.0/mass)*(drag+buoy);
 	}
 
 	///////////////////
