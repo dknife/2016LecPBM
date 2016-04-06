@@ -16,6 +16,22 @@ void CParticle::simulate(double dt, double curTime) {
 	CVec3d gravity(0, -10,0);
 	CVec3d acc = gravity;
 	
+	// buoyancy
+	// buoy = rho * gravity * volume;
+	// acc +=  buoy/mass;
+	float rho = 30.0;
+	float dragCoeff = - 2.;
+	CVec3d drag(0,0,0);
+	float volume = radius*radius*radius;
+	if(center[1]<5.0) { // in the water
+		CVec3d buoy(0,rho*10.0*volume,0);
+		drag = dragCoeff * vel; 
+		acc = acc + (1.0/mass)*(drag+buoy);
+	}
+
+	///////////////////
+
+
 	// change velocity
 	vel = vel + acc * dt;
 	// change position
