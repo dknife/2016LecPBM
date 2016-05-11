@@ -12,7 +12,7 @@
 #include "Particle.h"
 
 
-#define NPARTICLES 2
+#define NPARTICLES 20
 #define BoundaryRadius 5.0
 
 class CDynamicSimulator : public CSimulator {

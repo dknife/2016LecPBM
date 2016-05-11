@@ -7,19 +7,19 @@
 //
 
 #include "DynamicsSimulator.h"
+#include "myUtil.h"
 
 CDynamicSimulator::CDynamicSimulator() : CSimulator() {}
 
 
 void CDynamicSimulator::init() {
-	particle[0].setPosition(1,0,0);
-	particle[1].setPosition(-1,0,0);
-	particle[0].setVelocity(-1,0,0);
-	particle[1].setVelocity( 1,0,0);
-	particle[0].setRadius(0.2);
-	particle[1].setRadius(0.1);
-	particle[0].setMass(0.1);
-	particle[1].setMass(0.1);
+	for(int i=0;i<NPARTICLES; i++) {
+		particle[i].setPosition(rand(-3,3), 0, rand(-3,3));
+		particle[i].setVelocity(4, 0,0); //rand(-3,3), 0, rand(-3,3));
+		particle[i].setRadius(rand(0.1,0.2));		
+		particle[i].setMass(particle[i].getMass());
+	}
+	
 }
 
 void CDynamicSimulator::doBeforeSimulation(double dt, double currentTime) {
@@ -33,31 +33,33 @@ void CDynamicSimulator::doSimulation(double dt, double currentTime) {
 	for(int i=0; i<NPARTICLES; i++) {
 		particle[i].simulate(dt, currentTime);
 	}
-	// collision handling
-	CVec3d x0 = particle[0].getPosition();
-	CVec3d x1 = particle[1].getPosition();
-	CVec3d v0 = particle[0].getVelocity();
-	CVec3d v1 = particle[1].getVelocity();
-	double r0 = particle[0].getRadius();
-	double r1 = particle[1].getRadius();
-	double m0 = particle[0].getMass();
-	double m1 = particle[1].getMass();
-	CVec3d v0new, v1new;
 
-	double d = (x0-x1).len();
-	if(d<r0+r1) { // collided! (position)
-		if(v1[0]-v0[0] > 0) { // velocity collision check
-			v0new = (m0-m1)*v0 + 2.0*m1*v1;
-			v1new = (m1-m0)*v1 + 2.0*m0*v0;
-			v0new = (1.0/(m0+m1)) * v0new;
-			v1new = (1.0/(m0+m1)) * v1new;
-
-			particle[0].setVelocity(v0new[0], v0new[1], v0new[2]);
-			particle[1].setVelocity(v1new[0], v1new[1], v1new[2]);
+	// collision with boundary
+	CVec3d c, v;
+	double r;
+	CVec3d colNorm;
+	CVec3d vp, vt;
+	for(int i=0; i<NPARTICLES; i++) {
+		c = particle[i].getPosition();
+		r = particle[i].getRadius();
+		v = particle[i].getVelocity();
+		// collision check
+		double distance = c.len();
+		if (distance > BoundaryRadius - r) {
+			colNorm = -1.0 * c.getNormalized();
+			double alpha = v ^ colNorm;
+			vp = alpha * colNorm;
+			v = v - (1.0 + 0.9) * vp;
+			particle[i].setVelocity(v[0], v[1], v[2]);
 		}
 	}
 
 
+
+}
+
+
+void CDynamicSimulator::doAfterSimulation(double dt, double currentTime) {
 	// draw
 	for(int i=0; i<NPARTICLES; i++) {
 		particle[i].drawWithGL();
@@ -70,9 +72,4 @@ void CDynamicSimulator::doSimulation(double dt, double currentTime) {
 			0, BoundaryRadius * sin(angle));
 	}
 	glEnd();
-}
-
-
-void CDynamicSimulator::doAfterSimulation(double dt, double currentTime) {
-
 }
