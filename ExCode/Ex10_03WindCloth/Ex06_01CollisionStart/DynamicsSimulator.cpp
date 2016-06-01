@@ -58,11 +58,11 @@ void CDynamicSimulator::init() {
 		for(int j=0; j<NPartCol-1; j++) {
 			springNet->SetSpring(idx, 
 				i*NPartCol+j, (i+1)*NPartCol+j+1, 
-				0.5*sqrt2, springConstant);
+				0.5*sqrt2, springConstant*0.5);
 			idx++;
 			springNet->SetSpring(idx, 
 				(i+1)*NPartCol+j, (i)*NPartCol+j+1, 
-				0.5*sqrt2, springConstant);
+				0.5*sqrt2, springConstant*0.5);
 			idx++;
 		}
 	}

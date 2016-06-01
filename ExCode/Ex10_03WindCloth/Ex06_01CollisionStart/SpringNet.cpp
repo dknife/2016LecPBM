@@ -34,6 +34,7 @@ void CSpringNet::SetSpring(
 void CSpringNet::ComputeSpringForce() {
 		
 	CParticle part1, part2;
+	// spring force
 	for(int i=0;i<nSprings;i++) { // for all spring
 		part1 = p[s[i].p1];
 		part2 = p[s[i].p2];
@@ -64,6 +65,19 @@ void CSpringNet::ComputeSpringForce() {
 		p[p1].addForce(f_damp);
 		p[p2].addForce(-1.0*f_damp);
 
+	}
+
+	// drag and lift
+	CVec3d wind(50,0,0);
+	float k_drag = 0.05, k_lift = 0.01;
+	CVec3d fdrag, flift;
+	for(int i=0; i<nParticles; i++) {
+		float NdotW = normal[i]^wind.getNormalized();
+		if(NdotW<0) NdotW = -NdotW;
+		fdrag = (k_drag * NdotW) * wind;
+		p[i].addForce(fdrag);
+		flift = (k_lift * (1.0 - NdotW)) * wind.len() * normal[i];
+		p[i].addForce(flift);
 	}
 	
 }
