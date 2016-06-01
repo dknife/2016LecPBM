@@ -51,15 +51,16 @@ void CDynamicSimulator::init() {
 	}
 
 	// structural edges
+	double sqrt2 = sqrt(2.0);
 	for(int i=0; i<NPartRow-1; i++) {
 		for(int j=0; j<NPartCol-1; j++) {
 			springNet->SetSpring(idx, 
 				i*NPartCol+j, (i+1)*NPartCol+j+1, 
-				0.5, 15.0);
+				0.5*sqrt2, 15.0);
 			idx++;
 			springNet->SetSpring(idx, 
 				(i+1)*NPartCol+j, (i)*NPartCol+j+1, 
-				0.5, 15.0);
+				0.5*sqrt2, 15.0);
 			idx++;
 		}
 	}
@@ -132,6 +133,15 @@ void CDynamicSimulator::doAfterSimulation(double dt, double currentTime) {
 		springNet->p[i].drawWithGL();
 	}
 
+	glBegin(GL_LINES);
+	for(int i=0; i<springNet->nSprings; i++) {
+		CVec3d loc1 = springNet->p[springNet->s[i].p1].getPosition();
+		CVec3d loc2 = springNet->p[springNet->s[i].p2].getPosition();
+		glVertex3f(loc1[0],loc1[1],loc1[2]);
+		glVertex3f(loc2[0],loc2[1],loc2[2]);
+
+	}
+	glEnd();
 	
 	
 }
